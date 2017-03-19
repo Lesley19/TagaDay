@@ -8,7 +8,7 @@ class MySQLdb_operation(object):
     def __init__(self):
         pass
 
-    def Creat_table(self):
+    def Creat_table(inpuText,self):
         # 建立数据库连接
         db = MySQLdb.connect(host="localhost",user="nbr",passwd="1234",db="testDB")
         # 使用cursor()方法获取操作游标 
@@ -17,12 +17,13 @@ class MySQLdb_operation(object):
         cursor.execute("SELECT VERSION()")
         # 使用 fetchone() 方法获取一条数据库。
         data = cursor.fetchone()
-        print "Database version : %s " % data
+        print ("Database version : %s " % data)
         # 关闭数据库连接
         db.close()
 
 
 if __name__ == '__main__':
-
     Op = MySQLdb_operation()
-    Op.Creat_table()
+    inpuText = input("请输入您的笔记 形式如＃标签 文本:")
+    print (inpuText)
+    Op.Creat_table(inpuText)
