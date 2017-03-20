@@ -4,10 +4,12 @@
 import MySQLdb
 import datetime
 
+# 对用户命令做出判读：＃ 为存储文本，> 为命令
 def textHandle(inputText):
     if "＃" in inpuText or "#" in inpuText:
         print ("存储")
         inpuTextlist = inpuText.split()
+        print (inpuTextlist)
         tag = inpuTextlist[1]
         content = inpuTextlist[2]
         print(content,tag)
@@ -36,36 +38,45 @@ class MySQLdb_operation(object):
         cursor = db.cursor()
         print (tag)
 
-        #sql语句
-        sql_creatTable = "CREATE TABLE IF NOT EXISTS " + tag + " ( create_time DATETIME NOT NULL, content TEXT NOT NULL)"
+        # sql命令语句
+        sql_dropTable = "DROP TABLE " + tag
+        sql_creatTable = "CREATE TABLE IF NOT EXISTS " + tag + " ( create_time TEXT NOT NULL, content TEXT NOT NULL)"
         sql_insert = "INSERT INTO " + tag + " VALUES ('%s','%s')" % (query_datetime,content)
+        sql_select = "SELECT * from %s" % tag
         
-
-        # 使用execute方法执行SQL语句
+        # print 检查sql语句的正确性
         print (sql_creatTable)
         print (sql_insert)
-
+        print (sql_select)
+        
+        # 执行sql命令
+        #cursor.execute(sql_dropTable)
         cursor.execute(sql_creatTable)
         cursor.execute(sql_insert)
+        cursor.execute(sql_insert)
+        cursor.execute(sql_insert)
+        cursor.execute(sql_select)
 
-
-        cursor.execute("SELECT VERSION()")
-        cursor.execute("SELECT * from %s" % tag)
         # 使用 fetchone() 方法获取一条数据库。
         data = cursor.fetchall()
-        print ("Database version : %s " % data)
+        print (data)
         print (query_datetime)
         # 关闭数据库连接
         db.close()
 
 
 if __name__ == '__main__':
-    Op = MySQLdb_operation()
-    inpuText = input("请输入您的笔记 形式如＃标签 文本:")
-    tag,content = textHandle(inpuText)
-    print(tag,content)
 
-    Op.Creat_table(tag,content)
+    # 用户输入
+    # 存储笔记：＃ 标签 文本
+    # 删除笔记：> d
+    while 1:
+        Op = MySQLdb_operation()
+        inpuText = input("请输入您的笔记 形式如＃ 标签 文本（请勿忽略＃后的空格）:")
+        tag,content = textHandle(inpuText)
+        print(tag,content)
+
+        Op.Creat_table(tag,content)
 
 
 
